@@ -29,7 +29,10 @@ public class GameManager : MonoBehaviour
     {
         Enemies.Add(enemy);
     }
-
+    public void RemoveEnemy(Actor enemy)
+    {
+        Enemies.Remove(enemy);
+    }
     public Actor GetActorAtLocation(Vector3 location)
     {
         if (Player != null && Player.transform.position == location)

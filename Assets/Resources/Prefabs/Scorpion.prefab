@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1708770467787184668}
   - component: {fileID: 7934118526774045763}
   - component: {fileID: 5407775416745285264}
+  - component: {fileID: 412210471627594295}
   m_Layer: 0
   m_Name: Scorpion
   m_TagString: Untagged
@@ -100,6 +101,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FieldOfView: []
   FieldOfViewRange: 8
+  maxHitPoints: 16
+  hitPoints: 16
+  defense: 1
+  power: 4
 --- !u!114 &5407775416745285264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,5 +115,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 04a3c8b751b5ab54fac1c444967cfaec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &412210471627594295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1596590060186280388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af028bd8c61434a4f8119d19adbf4b0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

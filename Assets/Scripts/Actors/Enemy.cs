@@ -18,7 +18,7 @@ public class Enemy : MonoBehaviour
     {
         Vector3Int gridPosition = MapManager.Get.FloorMap.WorldToCell(transform.position);
         Vector2 direction = Algorithm.Compute((Vector2Int)gridPosition, (Vector2Int)targetPosition);
-        Action.Move(GetComponent<Actor>(), direction);
+        Action.MoveOrHit(GetComponent<Actor>(), direction); 
     }
 
     public void RunAI()
