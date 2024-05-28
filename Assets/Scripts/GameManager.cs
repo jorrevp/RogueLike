@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
     private static GameManager instance;
 
     private void Awake()
@@ -12,61 +11,67 @@ public class GameManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else if (instance != this)
         {
             Destroy(gameObject);
         }
-        Enemies = new List<Actor>();
     }
 
     public static GameManager Get { get => instance; }
-    public List<Actor> Enemies { get; private set; }
 
-    public Actor Player { get; set; }
-    public void AddEnemy(Actor enemy)
-    {
-        Enemies.Add(enemy);
-    }
-    public void RemoveEnemy(Actor enemy)
-    {
-        Enemies.Remove(enemy);
-    }
-    public Actor GetActorAtLocation(Vector3 location)
-    {
-        if (Player != null && Player.transform.position == location)
-        {
-            return Player;
-        }
+    public Actor Player;
+    public List<Actor> Enemies = new List<Actor>();
+    public List<Items.Consumable> Items = new List<Items.Consumable>();
 
-        foreach (var enemy in Enemies)
-        {
-            if (enemy.transform.position == location)
-            {
-                return enemy;
-            }
-        }
-
-        return null;
-    }
-
-    public GameObject CreateActor(string name, Vector2 position)
+    public GameObject CreateGameObject(string name, Vector2 position)
     {
         GameObject actor = Instantiate(Resources.Load<GameObject>($"Prefabs/{name}"), new Vector3(position.x + 0.5f, position.y + 0.5f, 0), Quaternion.identity);
         actor.name = name;
         return actor;
     }
+
+    public void AddEnemy(Actor enemy)
+    {
+        Enemies.Add(enemy);
+    }
+
+    public void RemoveEnemy(Actor enemy)
+    {
+        if (Enemies.Contains(enemy))
+        {
+            Enemies.Remove(enemy);
+        }
+    }
+
     public void StartEnemyTurn()
     {
-        foreach (Actor enemy in Enemies)
+        foreach (var enemy in Enemies)
         {
-            Enemy enemyComponent = enemy.GetComponent<Enemy>();
-            if (enemyComponent != null)
+            enemy.GetComponent<Enemy>().RunAI();
+        }
+    }
+
+    public Actor GetActorAtLocation(Vector3 location)
+    {
+        if (Player.transform.position == location)
+        {
+            return Player;
+        }
+        else
+        {
+            foreach (Actor enemy in Enemies)
             {
-                enemyComponent.RunAI();
+                if (enemy.transform.position == location)
+                {
+                    return enemy;
+                }
             }
         }
-    } 
+        return null;
+    }
+    public void AddItem(Items.Consumable item)
+    {
+        Items.Add(item);
+    }
 }
-

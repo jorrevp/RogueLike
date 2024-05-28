@@ -36,7 +36,7 @@ public class MapManager : MonoBehaviour
     public Dictionary<Vector2Int, Node> Nodes = new Dictionary<Vector2Int, Node>();
     public List<Vector3Int> VisibleTiles;
     public Dictionary<Vector3Int, TileData> Tiles;
-    
+
 
     [Header("Map Settings")]
     public int width = 80;
@@ -67,6 +67,7 @@ public class MapManager : MonoBehaviour
         AddTileMapToDictionary(ObstacleMap);
         SetupFogMap();
     }
+
 
 
     public bool InBounds(int x, int y) => 0 <= x && x < width && 0 <= y && y < height;

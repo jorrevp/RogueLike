@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour, Controls.IPlayerActions
 {
     private Controls controls;
-    
+
 
     private void Awake()
     {
@@ -20,6 +20,12 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
 
     private void OnEnable()
     {
+        if (controls == null)
+        {
+            Debug.LogError("Controls not initialized. Ensure the PlayerControls is properly instantiated in Awake.");   
+            return;
+        }
+
         controls.Player.SetCallbacks(this);
         controls.Enable();
     }
@@ -40,7 +46,7 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
 
     public void OnExit(InputAction.CallbackContext context)
     {
-        
+
     }
 
     private void Move()
