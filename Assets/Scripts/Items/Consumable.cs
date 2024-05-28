@@ -22,7 +22,8 @@ namespace Items
         }
         private void Start()
         {
-            GameManager.Get.AddItem(this);
+            GameManager gameManager = GameManager.Get;
+            gameManager.AddItem(this);
         }
     }
 }

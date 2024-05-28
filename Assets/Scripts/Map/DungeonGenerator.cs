@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 public class DungeonGenerator : MonoBehaviour
@@ -9,6 +8,7 @@ public class DungeonGenerator : MonoBehaviour
     private int maxRoomSize, minRoomSize;
     private int maxRooms;
     private int maxEnemies;
+    private int maxItems;
 
     List<Room> rooms = new List<Room>();
 
@@ -33,7 +33,10 @@ public class DungeonGenerator : MonoBehaviour
     {
         maxEnemies = max;
     }
-
+    public void SetMaxItems(int max)
+    {
+        maxItems = max;
+    }
     public void Generate()
     {
         rooms.Clear();
@@ -83,6 +86,7 @@ public class DungeonGenerator : MonoBehaviour
                 TunnelBetween(rooms[rooms.Count - 1], room);
             }
             PlaceEnemies(room, maxEnemies);
+            PlaceItems(room, maxItems);
             rooms.Add(room);
         }
         var player = GameManager.Get.CreateGameObject("Player", rooms[0].Center());
@@ -176,4 +180,36 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
     }
+    private void PlaceItems(Room room, int maxItems)
+    {
+        // Loop to spawn items
+        for (int counter = 0; counter < maxItems; counter++)
+        {
+            // Determine random position within the room
+            int x = Random.Range(room.X + 1, room.X + room.Width - 1);
+            int y = Random.Range(room.Y + 1, room.Y + room.Height - 1);
+
+            // Create a random number to determine which item to spawn
+            int itemType = Random.Range(0, 3); // 0 for HealthPotion, 1 for Fireball, 2 for ScrollOfConfusion
+
+            // Switch statement to spawn the corresponding item
+            switch (itemType)
+            {
+                case 0:
+                    GameManager.Get.CreateGameObject("HealthPotion", new Vector2(x, y));
+                    break;
+                case 1:
+                    GameManager.Get.CreateGameObject("Fireball", new Vector2(x, y));
+                    break;
+                case 2:
+                    GameManager.Get.CreateGameObject("ScrollOfConfusion", new Vector2(x, y));
+                    break;
+                default:
+                    Debug.LogError("Invalid item type!");
+                    break;
+            }
+        }
+    }
+   
+
 }

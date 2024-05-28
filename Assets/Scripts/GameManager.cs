@@ -70,8 +70,29 @@ public class GameManager : MonoBehaviour
         }
         return null;
     }
+    // Function to add an item to the list
     public void AddItem(Items.Consumable item)
     {
         Items.Add(item);
+    }
+
+    // Function to remove an item from the list
+    public void RemoveItem(Items.Consumable item)
+    {
+        Items.Remove(item);
+    }
+
+    // Function to get the item at a specific location in the list
+    public Items.Consumable GetItemAtLocation(int index)
+    {
+        if (index >= 0 && index < Items.Count)
+        {
+            return Items[index];
+        }
+        else
+        {
+            Debug.LogError("Index out of range.");
+            return null;
+        }
     }
 }
