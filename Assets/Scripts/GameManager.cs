@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,8 +22,11 @@ public class GameManager : MonoBehaviour
     public static GameManager Get { get => instance; }
 
     public Actor Player;
+    private List<Enemy> enemies = new List<Enemy>();
     public List<Actor> Enemies = new List<Actor>();
     public List<Items.Consumable> Items = new List<Items.Consumable>();
+
+    private Dictionary<Vector2Int, Items.Consumable> itemPositions = new Dictionary<Vector2Int, Items.Consumable>();
 
     public GameObject CreateGameObject(string name, Vector2 position)
     {
@@ -71,28 +75,43 @@ public class GameManager : MonoBehaviour
         return null;
     }
     // Function to add an item to the list
-    public void AddItem(Items.Consumable item)
+    public void AddItem(Items.Consumable item, Vector2Int position)
     {
-        Items.Add(item);
+        item.Position = position; // Set the item's position
+        itemPositions[position] = item; // Add to dictionary
     }
 
     // Function to remove an item from the list
     public void RemoveItem(Items.Consumable item)
     {
-        Items.Remove(item);
+       
+        itemPositions.Remove(item.Position);
     }
 
     // Function to get the item at a specific location in the list
-    public Items.Consumable GetItemAtLocation(int index)
+    public Items.Consumable GetItemAtLocation(Vector2Int location)
     {
-        if (index >= 0 && index < Items.Count)
+        Debug.Log($"Checking for item at location: {location}");
+        if (itemPositions.TryGetValue(location, out Items.Consumable item))
         {
-            return Items[index];
+            Debug.Log($"Found item at location: {location}");
+            return item;
         }
-        else
+        Debug.Log("No item found at this location.");
+        return null;
+    }
+    public List<Actor> GetNearbyEnemies(Vector3 location)
+    {
+        List<Actor> nearbyEnemies = new List<Actor>();
+
+        foreach (Enemy enemy in enemies)
         {
-            Debug.LogError("Index out of range.");
-            return null;
+            if (Vector3.Distance(enemy.transform.position, location) < 5f)
+            {
+                nearbyEnemies.Add(enemy.GetComponent<Actor>());
+            }
         }
+
+        return nearbyEnemies;
     }
 }

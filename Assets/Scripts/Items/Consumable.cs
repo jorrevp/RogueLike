@@ -15,7 +15,7 @@ namespace Items
 
         [SerializeField]
         private ItemType type;
-
+        public Vector2Int Position { get; set; }
         public ItemType Type
         {
             get { return type; }
@@ -23,7 +23,17 @@ namespace Items
         private void Start()
         {
             GameManager gameManager = GameManager.Get;
-            gameManager.AddItem(this);
+            Vector2Int itemPosition = new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
+            Position = itemPosition; // Set the position property
+            gameManager.AddItem(this, Position);
+        }
+        public class HealthPotion : Consumable
+        {
+            public int HealAmount = 50; // Stel de hoeveelheid healing in die deze potion geeft
+        }
+        public class Fireball : Consumable
+        {
+            public int Damage = 30; // Stel de hoeveelheid schade in die deze fireball doet
         }
     }
 }

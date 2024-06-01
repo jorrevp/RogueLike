@@ -33,5 +33,17 @@ public class UIManager : MonoBehaviour
     {
         Messages.GetComponent<Messages>().AddMessage(message, color);
     }
+
+    [SerializeField]
+    private GameObject inventory;
+
+    public InventoryUI InventoryUIComponent => inventory.GetComponent<InventoryUI>();
+    private void Start()
+    {
+        if (inventory == null)
+        {
+            Debug.LogError("Inventory GameObject is not assigned in the UIManager.");
+        }
+    }
 }
 

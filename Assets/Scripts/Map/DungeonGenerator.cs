@@ -182,34 +182,25 @@ public class DungeonGenerator : MonoBehaviour
     }
     private void PlaceItems(Room room, int maxItems)
     {
-        // Loop to spawn items
-        for (int counter = 0; counter < maxItems; counter++)
+        // the number of items we want
+        int numItems = UnityEngine.Random.Range(0, maxItems + 1);
+
+        for (int counter = 0; counter < numItems; counter++)
         {
-            // Determine random position within the room
-            int x = Random.Range(room.X + 1, room.X + room.Width - 1);
-            int y = Random.Range(room.Y + 1, room.Y + room.Height - 1);
+            // The borders of the room are walls, so add and subtract by 1
+            int x = UnityEngine.Random.Range(room.X + 1, room.X + room.Width - 1);
+            int y = UnityEngine.Random.Range(room.Y + 1, room.Y + room.Height - 1);
 
-            // Create a random number to determine which item to spawn
-            int itemType = Random.Range(0, 3); // 0 for HealthPotion, 1 for Fireball, 2 for ScrollOfConfusion
+            // Create and add consumable items to the room
+            Vector2 position = new Vector2(x, y);
+            GameObject itemObject = GameManager.Get.CreateGameObject("HealthPotion", position);
+            Items.Consumable item = itemObject.GetComponent<Items.Consumable>();
 
-            // Switch statement to spawn the corresponding item
-            switch (itemType)
-            {
-                case 0:
-                    GameManager.Get.CreateGameObject("HealthPotion", new Vector2(x, y));
-                    break;
-                case 1:
-                    GameManager.Get.CreateGameObject("Fireball", new Vector2(x, y));
-                    break;
-                case 2:
-                    GameManager.Get.CreateGameObject("ScrollOfConfusion", new Vector2(x, y));
-                    break;
-                default:
-                    Debug.LogError("Invalid item type!");
-                    break;
-            }
+            Vector2Int gridPosition = new Vector2Int(x, y);
+            GameManager.Get.AddItem(item, gridPosition); // Correctly pass the item and its position
         }
     }
-   
+
+
 
 }

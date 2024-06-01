@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour
 {
     public Actor Target;
     public bool IsFighting = false;
+    public int confused = 0; // Toegevoegde variabele
     private AStar algorithm;
 
     private void Start()
@@ -58,5 +59,9 @@ public class Enemy : MonoBehaviour
             }
         }
     }
-}
+    public void Confuse()
+    {
+        confused = 8;
+    }
+} 
 
