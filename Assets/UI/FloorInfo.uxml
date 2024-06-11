@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1;">
+        <ui:Label tabindex="-1" text="Floor x" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Floor" style="color: rgb(255, 255, 255); -unity-font: resource(&apos;VIDEOPHREAK&apos;); -unity-font-definition: resource(&apos;VIDEOPHREAK SDF&apos;);" />
+        <ui:Label tabindex="-1" text="x enemies left" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Enemies" style="-unity-font: resource(&apos;VIDEOPHREAK&apos;); -unity-font-definition: resource(&apos;VIDEOPHREAK SDF&apos;); color: rgb(255, 255, 255);" />
+    </ui:VisualElement>
+</ui:UXML>

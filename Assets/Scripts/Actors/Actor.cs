@@ -16,12 +16,17 @@ public class Actor : MonoBehaviour
     [SerializeField] private int hitPoints;
     [SerializeField] private int defense;
     [SerializeField] private int power;
+    [SerializeField] private int level = 1;
+    [SerializeField] private int xp = 0;
+    [SerializeField] private int xpToNextLevel = 100;
 
     public int MaxHitPoints { get => maxHitPoints; }
     public int HitPoints { get => hitPoints; }
     public int Defense { get => defense; }
     public int Power { get => power; }
-
+    public int Level { get => level; }
+    public int XP { get => xp; }
+    public int XPToNextLevel { get => xpToNextLevel; }
 
     private void Start()
     {
@@ -31,6 +36,8 @@ public class Actor : MonoBehaviour
         if (GetComponent<Player>())
         {
             UIManager.Get.UpdateHealth(HitPoints, MaxHitPoints);
+            UIManager.Get.UpdateLevel(Level);
+            UIManager.Get.UpdateXP(XP);
         }
     }
 
@@ -55,7 +62,7 @@ public class Actor : MonoBehaviour
         }
     }
 
-    public void DoDamage(int hp)
+    public void DoDamage(int hp, Actor attacker)
     {
         hitPoints -= hp;
 
@@ -65,8 +72,14 @@ public class Actor : MonoBehaviour
         {
             UIManager.Get.UpdateHealth(hitPoints, MaxHitPoints);
         }
-
-        if (hitPoints == 0) Die();
+        if (hitPoints == 0)
+        {
+            if (attacker != null && attacker.GetComponent<Player>())
+            {
+                attacker.AddXp(xp);
+            }
+            Die();
+        }
     }
     public void Heal(int hp)
     {
@@ -79,7 +92,35 @@ public class Actor : MonoBehaviour
             UIManager.Get.AddMessage($"You were healed for {effectiveHealing}!", Color.green); //Green
         }
     }
+    public void AddXp(int amount)
+    {
+        xp += amount;
+        Debug.Log($"XP added: {amount}, Current XP: {xp}");
 
+        while (xp >= xpToNextLevel)
+        {
+            xp -= xpToNextLevel;
+            level++;
+            xpToNextLevel = Mathf.RoundToInt(xpToNextLevel * 1.5f); // Exponentially increase XP required for next level
+            maxHitPoints += 10; // Example increase, adjust as needed
+            defense += 2; // Example increase, adjust as needed
+            power += 3; // Example increase, adjust as needed
+
+            if (GetComponent<Player>())
+            {
+                UIManager.Get.UpdateHealth(hitPoints, MaxHitPoints);
+                UIManager.Get.UpdateLevel(level);
+                UIManager.Get.AddMessage("You have leveled up!", Color.yellow); // Yellow
+                Debug.Log($"Level up! New Level: {level}");
+            }
+        }
+
+        if (GetComponent<Player>())
+        {
+            UIManager.Get.UpdateXP(xp);
+            Debug.Log($"UI updated with new XP: {xp}");
+        }
+    }
     private void Die()
     {
         if (GetComponent<Player>())

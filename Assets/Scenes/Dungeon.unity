@@ -123,6 +123,67 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &100822424
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 100822427}
+  - component: {fileID: 100822426}
+  - component: {fileID: 100822425}
+  m_Layer: 0
+  m_Name: floorInfoUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &100822425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100822424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b64abfa263163144e8372cc940c79298, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &100822426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100822424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: 972f7379bbaa12c4ebcfa2a16410fce2, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 2d27210aa8c484344aa22a70d7111006, type: 3}
+  m_SortingOrder: 0
+--- !u!4 &100822427
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100822424}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1065432492}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &368273421
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,6 +289,7 @@ MonoBehaviour:
   maxRooms: 30
   maxEnemies: 2
   maxItems: 2
+  floor: 1
 --- !u!156049354 &408639669
 Grid:
   m_ObjectHideFlags: 0
@@ -444,6 +506,7 @@ Transform:
   - {fileID: 368273422}
   - {fileID: 537637391}
   - {fileID: 1728505155}
+  - {fileID: 100822427}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1065432495
@@ -460,7 +523,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HealthBar: {fileID: 368273421}
   Messages: {fileID: 537637390}
-  inventory: {fileID: 1728505154}
+  InventoryUI: {fileID: 1728505154}
+  floorInfo: {fileID: 100822425}
 --- !u!1 &1410258481
 GameObject:
   m_ObjectHideFlags: 0
@@ -730,12 +794,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44e9d814d41812e47b8511f231aea3e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 0}
-  Enemies: []
+  Player: {fileID: 8276185680282233743, guid: e25361596e45a964bab8298e862445a1, type: 3}
+  Enemies:
+  - {fileID: 7934118526774045763, guid: bda8cc7d2e9993040a1b8f556641269a, type: 3}
+  - {fileID: 1936875511183746897, guid: b7a4cdefa64838045a89535247941079, type: 3}
   Items:
   - {fileID: 7409758094603373496, guid: 2a6f9257ac63369499440e08ab3b8043, type: 3}
   - {fileID: 8186379952012012680, guid: d846da40de1b4004abba858819cd264a, type: 3}
   - {fileID: 6782993095245845123, guid: 90d5ea7971e3b3e438e0475f28410098, type: 3}
+  Ladders: []
+  floorInfo: {fileID: 0}
 --- !u!4 &1684302755
 Transform:
   m_ObjectHideFlags: 0
@@ -763,7 +831,7 @@ GameObject:
   - component: {fileID: 1728505157}
   - component: {fileID: 1728505156}
   m_Layer: 0
-  m_Name: Inventory
+  m_Name: InventoryUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -796,6 +864,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7e06e41f5a21da4b8e514b8f4e2742e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selected: 10
+  numItems: 10
 --- !u!114 &1728505157
 MonoBehaviour:
   m_ObjectHideFlags: 0

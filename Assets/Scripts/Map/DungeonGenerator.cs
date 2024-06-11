@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class DungeonGenerator : MonoBehaviour
@@ -9,9 +10,10 @@ public class DungeonGenerator : MonoBehaviour
     private int maxRooms;
     private int maxEnemies;
     private int maxItems;
+    private int currentFloor;
 
     List<Room> rooms = new List<Room>();
-
+    private string[] enemyNamesInOrderOfStrength = { "Scorpion", "Taurus", "Wasp", "Spider" ,"Viking", "Wolf", "Wizard", "Lizard", "Boss" /* Add more enemies as needed */ };
     public void SetSize(int width, int height)
     {
         this.width = width;
@@ -37,9 +39,16 @@ public class DungeonGenerator : MonoBehaviour
     {
         maxItems = max;
     }
+    public void SetCurrentFloor(int floor)
+    {
+        currentFloor = floor;
+    }
+
+
     public void Generate()
     {
         rooms.Clear();
+        GameManager.Get.ClearLadders();
 
         for (int roomNum = 0; roomNum < maxRooms; roomNum++)
         {
@@ -87,9 +96,27 @@ public class DungeonGenerator : MonoBehaviour
             }
             PlaceEnemies(room, maxEnemies);
             PlaceItems(room, maxItems);
+
             rooms.Add(room);
         }
-        var player = GameManager.Get.CreateGameObject("Player", rooms[0].Center());
+        // Plaats de ladder naar beneden in het midden van de laatste kamer
+        var lastRoom = rooms[rooms.Count - 1];
+        GameManager.Get.CreateGameObject("LadderDown", lastRoom.Center());
+
+        GameObject player = GameObject.Find("Player");
+
+        if (player != null)
+        {
+            // Verplaats de speler naar het midden van de eerste kamer
+            Vector2Int playerPosition = rooms[0].Center();
+            player.transform.position = new Vector3(playerPosition.x + 0.5f, playerPosition.y + 0.5f, 0);
+        }
+        else
+        {
+            // Creëer de speler in het midden van de eerste kamer
+            Vector2Int playerPosition = rooms[0].Center();
+            player = GameManager.Get.CreateGameObject("Player", new Vector3(playerPosition.x  , playerPosition.y  , 0));
+        }
     }
 
     private bool TrySetWallTile(Vector3Int pos)
@@ -161,23 +188,22 @@ public class DungeonGenerator : MonoBehaviour
     private void PlaceEnemies(Room room, int maxEnemies)
     {
         // the number of enemies we want
-        int num = Random.Range(0, maxEnemies + 1);
+        int maxIndex = Mathf.Min(currentFloor, enemyNamesInOrderOfStrength.Length - 1);
 
-        for (int counter = 0; counter < num; counter++)
+        Debug.Log("Current Floor: " + currentFloor);
+        Debug.Log("Max Index: " + maxIndex);
+
+        for (int counter = 0; counter < maxEnemies; counter++)
         {
             // The borders of the room are walls, so add and substract by 1
             int x = Random.Range(room.X + 1, room.X + room.Width - 1);
             int y = Random.Range(room.Y + 1, room.Y + room.Height - 1);
 
-            // create different enemies
-            if (Random.value < 0.5f)
-            {
-                GameManager.Get.CreateGameObject("Scorpion", new Vector2(x, y));
-            }
-            else
-            {
-                GameManager.Get.CreateGameObject("Taurus", new Vector2(x, y));
-            }
+            // Pick an enemy name based on strength order
+            string enemyName = GetEnemyNameBasedOnStrength(maxIndex);
+
+            // Create the enemy GameObject
+            GameManager.Get.CreateGameObject(enemyName, new Vector2(x, y));
         }
     }
     private void PlaceItems(Room room, int maxItems)
@@ -200,7 +226,11 @@ public class DungeonGenerator : MonoBehaviour
             GameManager.Get.AddItem(item, gridPosition); // Correctly pass the item and its position
         }
     }
-
-
-
+    // Method to get the enemy name based on strength order
+    private string GetEnemyNameBasedOnStrength(int maxIndex)
+    {
+        // You can implement your logic here to choose the enemy name
+        // For now, let's pick a random name from the list
+        return enemyNamesInOrderOfStrength[Random.Range(0, maxIndex + 1)];
+    }
 }

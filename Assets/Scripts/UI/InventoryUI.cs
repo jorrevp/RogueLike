@@ -1,3 +1,4 @@
+using Items;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,26 +7,72 @@ using UnityEngine.UIElements;
 public class InventoryUI : MonoBehaviour
 {
     public Label[] labels = new Label[8];
-    private VisualElement root;
-    private int selected;
-    private int numItems;
-    public int Selected => selected;
-    private void Start()
+    public VisualElement root;
+    public int selected;
+    public int numItems;
+
+    public int Selected { get => selected; }
+
+    // Start is called before the first frame update
+    void Start()
     {
         root = GetComponent<UIDocument>().rootVisualElement;
-        for (int i = 0; i < 8; i++)
-        {
-            labels[i] = root.Q<Label>($"Item{i + 1}");
-        }
+        labels[0] = root.Q<Label>("Item1");
+        labels[1] = root.Q<Label>("Item2");
+        labels[2] = root.Q<Label>("Item3");
+        labels[3] = root.Q<Label>("Item4");
+        labels[4] = root.Q<Label>("Item5");
+        labels[5] = root.Q<Label>("Item6");
+        labels[6] = root.Q<Label>("Item7");
+        labels[7] = root.Q<Label>("Item8");
+
         Clear();
         root.style.display = DisplayStyle.None;
     }
 
     public void Clear()
     {
-        foreach (var label in labels)
+        for (int i = 0; i < labels.Length; i++)
         {
-            label.text = string.Empty;
+            labels[i].text = "";
+        }
+    }
+
+    public void Show(List<Consumable> list)
+    {
+        selected = 0;
+        numItems = list.Count;
+        Clear();
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            labels[i].text = list[i].name;
+        }
+        UpdateSelected();
+
+        root.style.display = DisplayStyle.Flex;
+    }
+
+    public void Hide()
+    {
+        root.style.display = DisplayStyle.None;
+    }
+
+    public void SelectNextItem()
+    {
+        if (selected < numItems - 1)
+        {
+            selected++;
+            UpdateSelected();
+        }
+    }
+
+    public void SelectPreviousItem()
+    {
+        if (selected > 0)
+        {
+            selected--;
+            UpdateSelected();
         }
     }
 
@@ -44,49 +91,4 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    public void SelectNextItem()
-    {
-        if (selected < numItems - 1)
-        {
-            selected++;
-        }
-        else
-        {
-            selected = 0; // Wrap around to the first item
-        }
-        UpdateSelected();
-    }
-
-    public void SelectPreviousItem()
-    {
-        if (selected > 0)
-        {
-            selected--;
-        }
-        else
-        {
-            selected = numItems - 1; // Wrap around to the last item
-        }
-        UpdateSelected();
-    }
-
-    public void Show(List<Items.Consumable> list)
-    {
-        selected = 0;
-        numItems = list.Count;
-        Clear();
-
-        for (int i = 0; i < numItems && i < labels.Length; i++)
-        {
-            labels[i].text = list[i].Type.ToString(); // Assuming Type has a meaningful name
-        }
-
-        UpdateSelected();
-        root.style.display = DisplayStyle.Flex;
-    }
-
-    public void Hide()
-    {
-        root.style.display = DisplayStyle.None;
-    }
 }

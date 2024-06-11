@@ -11,8 +11,9 @@ public class UIManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
-        else if (instance != this)
+        else
         {
             Destroy(gameObject);
         }
@@ -23,27 +24,31 @@ public class UIManager : MonoBehaviour
     [Header("Documents")]
     public GameObject HealthBar;
     public GameObject Messages;
+    public GameObject InventoryUI;
+    public FloorInfoUI floorInfo; // Add this line
+
+    public InventoryUI Inventory { get => InventoryUI.GetComponent<InventoryUI>(); }
 
     public void UpdateHealth(int current, int max)
     {
         HealthBar.GetComponent<HealthBar>().SetValues(current, max);
     }
-
+    public void UpdateLevel(int level)
+    {
+        HealthBar.GetComponent<HealthBar>().SetLevel(level);
+    }
+    public void UpdateXP(int xp)
+    {
+        Debug.Log($"Updating UI with XP: {xp}");
+        HealthBar.GetComponent<HealthBar>().SetXP(xp);
+    }
     public void AddMessage(string message, Color color)
     {
         Messages.GetComponent<Messages>().AddMessage(message, color);
     }
-
-    [SerializeField]
-    private GameObject inventory;
-
-    public InventoryUI InventoryUIComponent => inventory.GetComponent<InventoryUI>();
-    private void Start()
+    public void UpdateFloor(int floornumber)
     {
-        if (inventory == null)
-        {
-            Debug.LogError("Inventory GameObject is not assigned in the UIManager.");
-        }
+        floorInfo.UpdateFloorText(floornumber);
     }
 }
 

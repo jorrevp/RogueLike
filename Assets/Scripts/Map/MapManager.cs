@@ -14,7 +14,7 @@ public class MapManager : MonoBehaviour
         {
             instance = this;
         }
-        else if (instance != this)
+        else 
         {
             Destroy(gameObject);
         }
@@ -44,8 +44,9 @@ public class MapManager : MonoBehaviour
     public int roomMaxSize = 10;
     public int roomMinSize = 6;
     public int maxRooms = 30;
-    public int maxEnemies = 2;
+    public int maxEnemies = 2; 
     public int maxItems = 2;
+    public int floor = 0;  // Toegevoegd
 
     private void Start()
     {
@@ -63,14 +64,33 @@ public class MapManager : MonoBehaviour
         generator.SetMaxRooms(maxRooms);
         generator.SetMaxEnemies(maxEnemies);
         generator.SetMaxItems(maxItems);
+        generator.SetCurrentFloor(floor);  // Toegevoegd
         generator.Generate();
 
         AddTileMapToDictionary(FloorMap);
         AddTileMapToDictionary(ObstacleMap);
         SetupFogMap();
+
+        /*UIManager.Get.floorInfo.UpdateFloorText(floor); // Voeg deze lijn toe*/
+    }
+    public void MoveUp()
+    {
+        GameManager.Get.ClearFloor(); // Clear the floor
+        floor++;
+        GenerateDungeon();
+        /*UIManager.Get.floorInfo.UpdateFloorText(floor);*/
     }
 
-
+    public void MoveDown()
+    {
+        if (floor > 0)
+        {
+            GameManager.Get.ClearFloor(); // Clear the floor
+            floor--;
+            GenerateDungeon();
+            /*UIManager.Get.floorInfo.UpdateFloorText(floor);*/
+        }
+    }
 
     public bool InBounds(int x, int y) => 0 <= x && x < width && 0 <= y && y < height;
 
@@ -144,5 +164,11 @@ public class MapManager : MonoBehaviour
             FogMap.SetColor(pos, Color.clear);
             VisibleTiles.Add(pos);
         }
+    }
+    public void ClearFloor()
+    {
+        FloorMap.ClearAllTiles();
+        ObstacleMap.ClearAllTiles();
+        FogMap.ClearAllTiles();
     }
 }
